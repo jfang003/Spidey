@@ -20,6 +20,7 @@ public class Spidey {
                 "http://www.niu.edu", "http://www.harvard.edu"};
         boolean isDone = false;
         String TAG = "Spidey";
+        DB db = new DB();
 
         if(args.length > 0) {
         //if(!args[0].isEmpty()) {
