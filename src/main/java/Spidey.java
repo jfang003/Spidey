@@ -1,12 +1,14 @@
 import java.lang.reflect.Array;
+import java.sql.SQLException;
 import java.util.ArrayList;
-
+import java.sql.ResultSetMetaData;
+import java.sql.ResultSet;
 /**
  * Created by jason on 1/21/14.
  */
 public class Spidey {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws SQLException {
         // Number of crawlers/threads to create
         int totalCrawlers;
         // Arraylist holding our threads
@@ -21,6 +23,30 @@ public class Spidey {
         boolean isDone = false;
         String TAG = "Spidey";
         DB db = new DB();
+        String sql = "Select * From Records";
+        ResultSet rs;
+        rs = db.runSql(sql);
+        ResultSetMetaData rsmd = rs.getMetaData();
+        System.out.println("querying SELECT * FROM Records");
+        System.out.println(rsmd.getColumnCount());
+        int columnsNumber = rsmd.getColumnCount();
+        while (rs.next()) {
+            for (int i = 1; i <= columnsNumber; i++) {
+                if (i > 1) System.out.print(",  ");
+                String columnValue = rs.getString(i);
+                System.out.print(columnValue + " " + rsmd.getColumnName(i));
+            }
+            System.out.println("");
+        }
+        Record r = new Record();
+        sql = r.insert();
+        System.out.println(sql);
+
+        try {
+            db.runSql2(sql);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
 
         if(args.length > 0) {
         //if(!args[0].isEmpty()) {
