@@ -1,0 +1,4 @@
+Access mysql to dump files:
+	mysql -u root -h 127.0.0.1 -p 
+View Database:
+	mysql workbench(open in dash)

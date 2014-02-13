@@ -31,7 +31,7 @@ public class LuceneIndex {
         boolean UpdateTime=false;
         boolean Raw=false;
         boolean LinksTo=false;
-        boolean LinksBack=false;
+        boolean LinkBacks=false;
         boolean LoadTime=false;
         boolean Head=false;
         for (int i=0;i<args.length;i++)
@@ -46,7 +46,7 @@ public class LuceneIndex {
             else if(args[i].equals("UpdateTime")) UpdateTime=true;
             else if(args[i].equals("Raw")) Raw=true;
             else if(args[i].equals("LinksTo")) LinksTo=true;
-            else if(args[i].equals("LinksBack")) LinksBack=true;
+            else if(args[i].equals("LinkBacks")) LinkBacks=true;
             else if(args[i].equals("Head")) Head=true;
             else
             {
@@ -57,7 +57,7 @@ public class LuceneIndex {
         File file = new File("/home/james/lucene_index");
         //establish the mysql connection
         Class.forName("com.mysql.jdbc.Driver").newInstance();
-        Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/Spidey", "root", "mastery1");
+        Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/Spidey", "root", "root");
         StandardAnalyzer analyzer = new StandardAnalyzer(Version.LUCENE_40);
         IndexWriterConfig conf = new IndexWriterConfig(Version.LUCENE_40,analyzer);
         Directory indexDir = FSDirectory.open(file);
@@ -67,10 +67,10 @@ public class LuceneIndex {
         ResultSet result = statement.executeQuery(query);
         //according to the results create the index files
         while (result.next()) {
-            System.out.println("Retrieved ID:["+result.getString("RecordID")+"]");
+            System.out.println("Retrieved ID:["+result.getString("ID")+"]");
             Document document = new Document();
             //add the fields to the index as you required
-            document.add(new IntField("id", result.getInt("RecordID"), Field.Store.NO));
+            document.add(new IntField("id", result.getInt("ID"), Field.Store.NO));
             if(Body) {
                 try{
                 document.add(new TextField("body", result.getString("Body"), Field.Store.YES));
@@ -151,17 +151,17 @@ public class LuceneIndex {
                 }
                 catch(Exception e){Log.d("Lucene Index","Null LinksTo",4);}
             }
-            if(LinksBack)
+            if(LinkBacks)
             {
                 try{
-                document.add(new IntField("LinksBack", result.getInt("LinksBack"), Field.Store.NO));
-                System.out.println("LinksBack");
+                document.add(new IntField("LinkBacks", result.getInt("LinkBacks"), Field.Store.NO));
+                System.out.println("LinkBacks");
                 }
-                catch(Exception e){Log.d("Lucene Index","Null LinksBack",4);}
+                catch(Exception e){Log.d("Lucene Index","Null LinkBacks",4);}
             }
             //document.add(new Field("", result.getString("COMP_DESC"), Field.Store.YES, Field.Index.ANALYZED));
             //create the index files
-            writer.updateDocument(new Term("id", result.getString("RecordID")), document);
+            writer.updateDocument(new Term("id", result.getString("ID")), document);
         }
         writer.close();
     }
