@@ -3,10 +3,10 @@
  */
 public abstract class Log {
 
-    public static int outputLevel = 7;
+    public static int outputLevel = 3;
 
     public static void d(String tag, String m, int l) {
-        if(l < outputLevel) {
+        if(l <= outputLevel) {
             System.out.println(String.format("%s:\t%s:\t%s", tag, getLevel(l), m));
         }
     }
@@ -41,5 +41,7 @@ public abstract class Log {
         }
         return level;
     }
+
+    public static void setOutputLevel(int i) {outputLevel = i;}
 
 }

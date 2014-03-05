@@ -62,7 +62,7 @@ public class LuceneIndex {
         IndexWriterConfig conf = new IndexWriterConfig(Version.LUCENE_40,analyzer);
         Directory indexDir = FSDirectory.open(file);
         IndexWriter writer = new IndexWriter(indexDir,conf);
-        String query = "select * from Records";
+        String query = "select * from records";
         Statement statement = connection.createStatement();
         ResultSet result = statement.executeQuery(query);
         //according to the results create the index files
